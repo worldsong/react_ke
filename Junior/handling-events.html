@@ -11,15 +11,14 @@
 <div id="root"></div>
 <script type="text/babel">
     class LoggingButton extends React.Component {
-        // This syntax ensures `this` is bound within handleClick.
-        // Warning: this is *experimental* syntax.
-        handleClick = () => {
+        handleClick() {
             console.log('this is:', this);
         }
 
         render() {
+            // This syntax ensures `this` is bound within handleClick
             return (
-                    <button onClick={this.handleClick}>
+                    <button onClick={(e) => this.handleClick(e)}>
                         Click me
                     </button>
             );
