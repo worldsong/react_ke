@@ -10,22 +10,29 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    class LoggingButton extends React.Component {
-        handleClick() {
-            console.log('this is:', this);
+    class Popper extends React.Component{
+        constructor(){
+            super();
+            this.state = {name:'Hello world!'};
         }
 
-        render() {
-            // This syntax ensures `this` is bound within handleClick
+        preventPop(name, e){    //事件对象e要放在最后
+            e.preventDefault();
+            alert(name);
+        }
+
+        render(){
             return (
-                    <button onClick={(e) => this.handleClick(e)}>
-                        Click me
-                    </button>
+                    <div>
+                        <p>hello</p>
+                        {/* Pass params via bind() method. */}
+                        <a href="https://reactjs.org" onClick={this.preventPop.bind(this,this.state.name)}>Click</a>
+                    </div>
             );
         }
     }
     ReactDOM.render(
-        <LoggingButton />,
+        <Popper />,
         document.getElementById('root')
     );
 
