@@ -25,6 +25,11 @@
             return (
                     <div>
                         <p>hello</p>
+                        {/*
+                        * 向事件处理程序传递参数,下面两种方式是等价的，分别通过 arrow functions 和 Function.prototype.bind 来为特定事件类型添加事件处理程序。
+                        * */}
+                        {/*<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>*/}
+                        {/*<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>*/}
                         {/* Pass params via bind() method. */}
                         <a href="https://reactjs.org" onClick={this.preventPop.bind(this,this.state.name)}>Click</a>
                     </div>
