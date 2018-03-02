@@ -10,20 +10,30 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function ActionLink() {
-        function handleClick(e) {
-            e.preventDefault();
-            console.log('The link was clicked.');
+    class Toggle extends React.Component {
+        constructor(props){
+            super(props);
+            this.state = {isToggleOn: true};
+//            this.handleClick = this.handleClick.bind(this);
         }
 
-        return (
-                <a href="#" onClick={handleClick}>
-                    Click me
-                </a>
-        );
+        handleClick(){
+            console.log(this)
+            this.setState(prevState => ({
+                isToggleOn: !prevState.isToggleOn
+            }));
+        }
+
+        render(){
+            return (
+                <button onClick={this.handleClick}>
+                    {this.state.isToggleOn ? 'ON' : 'OFF'}
+                </button>
+            )
+        }
     }
     ReactDOM.render(
-            <ActionLink />,
+        <Toggle />,
         document.getElementById('root')
     );
 
