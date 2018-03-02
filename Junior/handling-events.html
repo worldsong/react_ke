@@ -10,30 +10,23 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    class Toggle extends React.Component {
-        constructor(props){
-            super(props);
-            this.state = {isToggleOn: true};
-//            this.handleClick = this.handleClick.bind(this);
+    class LoggingButton extends React.Component {
+        // This syntax ensures `this` is bound within handleClick.
+        // Warning: this is *experimental* syntax.
+        handleClick = () => {
+            console.log('this is:', this);
         }
 
-        handleClick(){
-            console.log(this)
-            this.setState(prevState => ({
-                isToggleOn: !prevState.isToggleOn
-            }));
-        }
-
-        render(){
+        render() {
             return (
-                <button onClick={this.handleClick}>
-                    {this.state.isToggleOn ? 'ON' : 'OFF'}
-                </button>
-            )
+                    <button onClick={this.handleClick}>
+                        Click me
+                    </button>
+            );
         }
     }
     ReactDOM.render(
-        <Toggle />,
+        <LoggingButton />,
         document.getElementById('root')
     );
 
