@@ -10,24 +10,28 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function Mailbox(props) {
-        const unreadMessages = props.unreadMessages;
-        return (
-            <div>
-                <h1>Hello!</h1>
-                {unreadMessages.length > 0 &&
-                    <h2>
-                        You have {unreadMessages.length} unread messages.
-                    </h2>
-                }
-            </div>
-        );
+    class LoginControl extends React.Component {
+        constructor(props){
+            super(props);
+            this.state = {isLoggedIn: props.isLoggedIn};
+        }
+
+        render(){
+            console.log(this);
+            const isLoggedIn = this.state.isLoggedIn;
+            return (
+                <div>
+                    The user is <b>{isLoggedIn ? 'currently' : 'not'}</b> logged in.
+                </div>
+            )
+        }
     }
-    const messages = ['React', 'Re:React', 'Re:Re:React'];
     ReactDOM.render(
-        <Mailbox unreadMessages={messages}/>,
+        // Try changing to isLoggedIn={true}:
+            <LoginControl isLoggedIn={false} />,
         document.getElementById('root')
-    )
+    );
+
 </script>
 <!--
   Note: this page is a great way to try React but it's not suitable for production.
