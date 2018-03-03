@@ -8,17 +8,43 @@
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
 </head>
 <body>
-<div id="root">
-    <form>
-        <label>
-            Name:
-            <input type="text" name="name" />
-        </label>
-        <input type="submit" value="Submit" />
-    </form>
-</div>
+<div id="root"></div>
 <script type="text/babel">
+    class NameForm extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {value: ''};
 
+            this.handleChange = this.handleChange.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
+        }
+
+        handleChange(event) {
+            this.setState({value: event.target.value});
+        }
+
+        handleSubmit(event) {
+            alert('A name was submitted: ' + this.state.value);
+            event.preventDefault();
+        }
+
+        render() {
+            return (
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            Name:
+                            <input type="text" value={this.state.value} onChange={this.handleChange} />
+                        </label>
+                        <input type="submit" value="Submit" />
+                    </form>
+            );
+        }
+    }
+
+    ReactDOM.render(
+        <NameForm />,
+        document.getElementById('root')
+    )
 </script>
 <!--
   Note: this page is a great way to try React but it's not suitable for production.
