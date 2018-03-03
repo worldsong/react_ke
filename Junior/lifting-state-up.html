@@ -10,14 +10,12 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function BoilingVerdict(props) {
-        if (props.celsius >= 100) {
-            return <p>水会烧开</p>;
-        }
-        return <p>水不会烧开</p>;
-    }
+    const scaleNames = {
+        c: 'Celsius',
+        f: 'Fahrenheit'
+    };
 
-    class Calculator extends React.Component {
+    class TemperatureInput extends React.Component {
         constructor(props) {
             super(props);
             this.handleChange = this.handleChange.bind(this);
@@ -30,17 +28,24 @@
 
         render() {
             const temperature = this.state.temperature;
+            const scale = this.props.scale;
             return (
                     <fieldset>
-                        <legend>输入一个摄氏温度</legend>
-                        <input
-                                value={temperature}
-                                onChange={this.handleChange} />
-
-                        <BoilingVerdict
-                                celsius={parseFloat(temperature)} />
-
+                        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+                        <input value={temperature}
+                               onChange={this.handleChange} />
                     </fieldset>
+            );
+        }
+    }
+
+    class Calculator extends React.Component {
+        render() {
+            return (
+                    <div>
+                        <TemperatureInput scale="c" />
+                        <TemperatureInput scale="f" />
+                    </div>
             );
         }
     }
