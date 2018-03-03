@@ -10,31 +10,48 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function ListItem(props) {
-        // 对啦！这里不需要指定key:
-        return <li>{props.value}</li>;
+    function Post(props) {
+        return(
+                <div key={props.id}>
+                    <h3>{props.title}</h3>
+                    <p>{props.content}</p>
+                </div>
+        )
     }
-
-    function NumberList(props) {
-        const numbers = props.numbers;
-        return (
+    function Blog(props) {
+        const sidebar = (
                 <ul>
-                    {numbers.map((number) =>
-                        // 又对啦！key应该在数组的上下文中被指定
-                            <ListItem key={number.toString()}
-                                      value={number} />
-
+                    {props.posts.map((post) =>
+                            <li key={post.id}>
+                                {post.title}
+                            </li>
                     )}
                 </ul>
         );
+        const content = props.posts.map((post) =>
+                <Post
+                        key={post.id}
+                        id={post.id}
+                        content={post.content}
+                        title={post.title} />
+        );
+        return (
+                <div>
+                    {sidebar}
+                    <hr />
+                    {content}
+                </div>
+        );
     }
 
-    const numbers = [1, 2, 3, 4, 5];
+    const posts = [
+        {id: 1, title: 'Hello World', content: 'Welcome to learning React!'},
+        {id: 2, title: 'Installation', content: 'You can install React from npm.'}
+    ];
     ReactDOM.render(
-            <NumberList numbers={numbers} />,
+            <Blog posts={posts} />,
         document.getElementById('root')
     );
-
 </script>
 <!--
   Note: this page is a great way to try React but it's not suitable for production.
