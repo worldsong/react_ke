@@ -1,0 +1,51 @@
+#app{
+  width:450px;
+  height:250px;
+  margin:0 auto;
+  padding:0 25px;
+}
+.container {
+  height: 200px;
+  width: 150px;
+  float: left;
+  overflow: scroll;
+}
+.scroller {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+.item {
+  height: 40px;
+  text-align:center;
+  line-height: 40px;
+  cursor:pointer;
+}
+::-webkit-scrollbar { /*隐藏滚轮*/
+  display: none;
+}
+.box {
+  width: 450px;
+  height: 40px;
+  position: absolute;
+  z-index: 1;
+  top: 80px;
+  border: dashed 1px #f00;
+}
+.dialog {
+  position: relative;
+  width:452px;
+  height:200px;
+  border:1px solid #eee;
+  /*background: #ff0;*/
+  box-shadow: 5px 5px 5px #ddd;
+}
+.btn {
+  width:200px;
+  color:white;
+  text-align: center;
+  border-radius: 5px;
+  background: red;
+  margin: 10px auto;
+  border: solid 1px red;
+  cursor:pointer;
+}

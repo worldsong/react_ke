@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>深入JSX</title>
+<!--    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>-->
+    <meta name="viewport" content="width=device-width, user-scalable=no,
+          initial-scale=1.0,  maximum-scale=1.0, minimum-scale=1.0">
+    <script src="https://cdn.bootcss.com/react/15.4.2/react.min.js"></script>
+    <script src="https://cdn.bootcss.com/react/15.4.2/react-dom.min.js">
+    </script>
+    <script src="https://cdn.bootcss.com/babel-standalone/6.22.1/babel.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.2.0/zepto.js"></script>
+    <style>
+        #app{
+            width:450px;
+            height:250px;
+            margin:0 auto;
+            padding:0 25px;
+        }
+        .container {
+            height: 200px;
+            width: 150px;
+            float: left;
+            overflow: scroll;
+        }
+        .scroller {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+        .item {
+            height: 40px;
+            text-align:center;
+            line-height: 40px;
+            cursor:pointer;
+        }
+        ::-webkit-scrollbar { /*隐藏滚轮*/
+            display: none;
+        }
+        .box {
+            width: 450px;
+            height: 40px;
+            position: absolute;
+            z-index: 1;
+            top: 80px;
+            border: dashed 1px #f00;
+        }
+        .dialog {
+            position: relative;
+            width:452px;
+            height:200px;
+            border:1px solid #eee;
+            /*background: #ff0;*/
+            box-shadow: 5px 5px 5px #ddd;
+        }
+        .btn {
+            width:200px;
+            color:white;
+            text-align: center;
+            border-radius: 5px;
+            background: red;
+            margin: 10px auto;
+            border: solid 1px red;
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+    /**
+     * 滚动组件
+     */
+    var WheelView = React.createClass({
+        getInitialState: function () {
+            return {
+                data: []
+            }
+        },
+        /**
+         * 当有新的属性需要更新时。也就是网络数据回来之后
+         * @param nextProps
+         */
+        componentWillReceiveProps: function (nextProps) {//接收父组建的数据
+            this.setState({
+                data: nextProps.data,
+            });//把新的数据填进列表，setState会自动触发render更新界面
+            this.refs.scroller.scrollTop = 40 * nextProps.index;
+            //每个列表选项高度为40px;
+        },
+        componentDidMount: function () {
+            var self = this;
+            self.refs.scroller.addEventListener('touchstart', touchStart, false);
+            self.refs.scroller.addEventListener('touchend', touchEnd, false);
+            self.refs.scroller.addEventListener('mousedown', touchStart, false);
+            self.refs.scroller.addEventListener('mouseup', touchEnd, false);
+
+            function touchStart(event) {
+                self.isTouchStart = true;
+            }
+
+            function touchEnd(event) {
+                self.isTouchStart = false;
+                self.timer = setTimeout(self.reSet, 100)
+                //100毫秒未触摸，认定滚动结束进行状态修正
+            }
+        },
+
+        /**
+         * 监听滚动事件
+         * @param e
+         */
+        onScroll: function () {
+            var self = this;
+            if (this.timer) clearTimeout(this.timer)//如果一直在滚动，不会触发timer
+            this.timer = setTimeout(self.reSet, 100)
+            //100毫秒未滚动，认定滚动结束
+        },
+
+        /**
+         * 状态修正
+         */
+        reSet: function () {
+            var self = this;
+            if (self.isTouchStart)return;//如果在触摸状态，返回
+            console.log('scrolling ends..')
+            var top = self.refs.scroller.scrollTop;//滚过的高度
+            var dis = top % 40;
+            var target;
+            if (dis > 20) {//超过一半，向下滚
+                target=top + (40 - dis);
+                self.transfrom(target);
+            } else {//否则滚回去
+                target=top - dis;
+                self.transfrom(target);
+            }
+            self.index = target / 40;//  当前选中的序号
+            self.props.onDataChange(self.props.type, self.index);
+        },
+        handleClick:function(e){   //点到哪个滚到目标位置
+            console.log(e.clientY-120);
+            var distance = e.clientY-120;  //当前点击的位置距目标位置的距离
+            var self=this;
+            var top = self.refs.scroller.scrollTop;  //滚过的高度
+            var target = top+Math.floor(distance/40)*40;  //需要滚动的高度
+            self.transfrom(target);    //动画过渡到目标位置
+            self.index = target / 40;  //  当前选中的序号
+            self.props.onDataChange(self.props.type, self.index);
+            //回调函数数据改变事件
+        },
+        /**
+         * 动画过渡到目标位置
+         * @param target
+         */
+        transfrom: function (target) {
+            var self = this;
+            var now = self.refs.scroller.scrollTop;
+            var step = (target - now) / 20;
+            setTimeout(function () {
+                self.refs.scroller.scrollTop = self.refs.scroller.scrollTop + step;
+                if (self.refs.scroller.scrollTop != target)
+                    setTimeout(this, 10);//没有滚动到目标位置，继续触发自己
+            },10);
+        },
+
+        render: function () {
+            return (<div className="container"
+                         ref="scroller"
+                         onScroll={this.onScroll}
+                         onClick={this.handleClick}>
+                        <div className="scroller">
+                            {
+                                this.state.data.map(function (item) {
+                                    //循环把数据显示出来
+                                    return <div className="item">{item}</div>
+                                })
+                            }
+                        </div>
+                    </div>
+            );
+        }
+    });
+
+    /**
+     * 选择组件
+     */
+    var WheelDialog = React.createClass({
+        getInitialState: function () {
+            return {
+                data: [],
+                pro: [],//省数组
+                city: [],//市数组
+                area: [],//区数组
+                pIndex: 0,//当前的省下标
+                cIndex: 0,//当前的市下标
+                aIndex: 0,//当前的区下标
+            }
+        },
+        componentWillReceiveProps: function (nextProps) {
+            this.setState({data: nextProps.data});//把新的数据填进列表，setState会自动触发render更新界面
+            this.initData(nextProps.data);
+        },
+        initData: function (data) {
+            var pArr = [];
+            var cArr = [];
+            var aArr = [];
+            data.map(function (pro) {
+                pArr.push(pro.name);
+            });
+            if (data[0])
+                data[0].city.map(function (city) {
+                    cArr.push(city.name)
+                });
+            aArr = data[0].city[0].area;
+            this.setState({
+                pro: pArr,
+                city: cArr,
+                area: aArr
+            });
+            this.props.onAddressSelect(0, 0, 0);
+        },
+        onDataChange: function (type, index) {
+            console.log(type + "   --->" + index)
+            var cArr = [];
+            var aArr = [];
+            switch (type) {
+                case  "pro"://省带动市区变化
+                    this.state.data[index].city.map(function (city) {
+                        cArr.push(city.name)
+                    });
+                    aArr = this.state.data[index].city[0].area;
+                    this.setState({
+                        city: cArr,
+                        area: aArr,
+                        pIndex: index,
+                        cIndex: 0,
+                        aIndex: 0,
+                    });
+                    break;
+                case  "city"://市带动区变化
+                    aArr = this.state.data[this.state.pIndex].city[index].area;
+                    this.setState({
+                        area: aArr,
+                        cIndex: index,
+                        aIndex: 0,
+                    });
+
+                    break;
+                case  "area":
+                    this.setState({aIndex: index});
+                    break;
+            }
+            this.props.onAddressSelect(this.state.pIndex, this.state.cIndex, this.state.aIndex);//数据变化之后，触发回调
+        },
+        render: function () {
+            return (
+                    <div className="dialog">
+                        <div  className="box"></div>
+                        <WheelView type="pro" data={this.state.pro}
+                                   index={this.state.pIndex}
+                                   onDataChange={this.onDataChange}/>
+                        <WheelView type="city" data={this.state.city}
+                                   index={this.state.cIndex}
+                                   onDataChange={this.onDataChange}/>
+                        <WheelView type="area" data={this.state.area}
+                                   index={this.state.aIndex}
+                                   onDataChange={this.onDataChange}/>
+
+                    </div>
+            );
+        }
+    });
+    /**
+     * 整个应用
+     */
+    var App = React.createClass({
+        getInitialState: function () {  //初始化数据
+            return {data: []}
+        },
+        /**
+         * 城市选择回调，返回省市区的下标
+         */
+        onAddressSelect: function (pIndex, cIndex, aIndex) {
+            var data = this.state.data;
+            var address = data[pIndex].name
+                + data[pIndex].city[cIndex].name
+                + data[pIndex].city[cIndex].area[aIndex];
+            console.log(" address:  --->" + address)
+            this.address = address;
+            //与渲染无关的数据  直接存在this对象里  如果存在State里面会导致页面脏渲染，卡顿
+        },
+        onClick: function () {
+            var ans = '选择的地址：'+this.address;
+            alert(ans);
+        },
+        componentDidMount: function () {
+            var self = this;
+            $.get("http://ac-wiuh7w1y.clouddn.com/c4acc5d3bec3fb3216fa.json",
+                function (data) {
+                    self.setState({data: data});
+                });
+        },
+        render: function () {
+            return (<div >
+                        <div className="btn" onClick={this.onClick}>点击获取城市</div>
+                        <WheelDialog
+                                data={this.state.data}
+                                onAddressSelect={this.onAddressSelect}//传进回调
+                        />
+                    </div>
+            );
+        }
+    });
+
+    ReactDOM.render(
+        <App />,
+        document.getElementById('root')
+    );
+
+</script>
+<!--
+  Note: this page is a great way to try React but it's not suitable for production.
+  It slowly compiles JSX with Babel in the browser and uses a large development build of React.
+
+  To set up a production-ready React build environment, follow these instructions:
+  * https://reactjs.org/docs/add-react-to-a-new-app.html
+  * https://reactjs.org/docs/add-react-to-an-existing-app.html
+
+  You can also use React without JSX, in which case you can remove Babel:
+  * https://reactjs.org/docs/react-without-jsx.html
+  * https://reactjs.org/docs/cdn-links.html
+-->
+</body>
+</html>
