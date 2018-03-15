@@ -11,28 +11,38 @@
 <div id="root"></div>
 <script type="text/babel">
     function CustomTextInput(props) {
-        // 这里必须声明 textInput，这样 ref 回调才可以引用它
-        let textInput = null;
+        return (
+                <input ref={props.inputRef} />
+        )
+    }
 
-        function handleClick() {
-            textInput.focus();
+    class Parent extends React.Component {
+        constructor(props) {
+            super(props);
+            this.focusTextInput = this.focusTextInput.bind(this);
         }
 
-        return (
+        focusTextInput() {
+            // Explicitly focus the text input using the raw DOM API
+            this.inputElement.focus();
+        }
+        render(){
+            return (
                 <div>
-                    <input
-                            type="text"
-                            ref={(input) => { textInput = input; }} />
+                    <CustomTextInput
+                            inputRef = {el => this.inputElement = el}
+                    />
                     <input
                             type="button"
                             value="Focus the text input"
-                            onClick={handleClick}
+                            onClick={this.focusTextInput}
                     />
                 </div>
-        );
+            )
+        }
     }
     ReactDOM.render(
-        <CustomTextInput />,
+        <Parent />,
         document.getElementById('root')
     );
 
