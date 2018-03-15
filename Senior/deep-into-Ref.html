@@ -13,10 +13,10 @@
     class CustomTextInput extends React.Component {
         constructor(props) {
             super(props);
-            this.focus = this.focus.bind(this);
+            this.focusTextInput = this.focusTextInput.bind(this);
         }
 
-        focus() {
+        focusTextInput() {
             // 直接使用原生 API 使 text 输入框获得焦点
             this.textInput.focus();
         }
@@ -32,7 +32,7 @@
                         <input
                                 type="button"
                                 value="Focus the text input"
-                                onClick={this.focus}
+                                onClick={this.focusTextInput}
                         />
                     </div>
             );
