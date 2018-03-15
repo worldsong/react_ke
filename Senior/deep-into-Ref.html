@@ -16,7 +16,15 @@
         )
     }
 
-    class Parent extends React.Component {
+    function Parent(props) {
+        return (
+                <div>
+                    My input: <CustomTextInput inputRef={props.inputRef} />
+                </div>
+        );
+    }
+
+    class Grandparent extends React.Component {
         constructor(props) {
             super(props);
             this.focusTextInput = this.focusTextInput.bind(this);
@@ -29,7 +37,7 @@
         render(){
             return (
                 <div>
-                    <CustomTextInput
+                    <Parent
                             inputRef = {el => this.inputElement = el}
                     />
                     <input
@@ -42,7 +50,7 @@
         }
     }
     ReactDOM.render(
-        <Parent />,
+        <Grandparent />,
         document.getElementById('root')
     );
 
