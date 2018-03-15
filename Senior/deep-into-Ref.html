@@ -10,21 +10,29 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function MyFunctionalComponent() {
-        return <input />;
-    }
+    function CustomTextInput(props) {
+        // 这里必须声明 textInput，这样 ref 回调才可以引用它
+        let textInput = null;
 
-    class Parent extends React.Component {
-        render() {
-            // 这里 `ref` 无效！
-            return (
-                    <MyFunctionalComponent
-                            ref={(input) => { this.textInput = input; }} />
-            );
+        function handleClick() {
+            textInput.focus();
         }
+
+        return (
+                <div>
+                    <input
+                            type="text"
+                            ref={(input) => { textInput = input; }} />
+                    <input
+                            type="button"
+                            value="Focus the text input"
+                            onClick={handleClick}
+                    />
+                </div>
+        );
     }
     ReactDOM.render(
-        <Parent />,
+        <CustomTextInput />,
         document.getElementById('root')
     );
 
