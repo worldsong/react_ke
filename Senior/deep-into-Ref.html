@@ -38,8 +38,21 @@
             );
         }
     }
+
+    class AutoFocusTextInput extends React.Component {
+        componentDidMount() {
+            this.textInput.focusTextInput();
+        }
+
+        render() {
+            return (
+                    <CustomTextInput
+                            ref={(input) => { this.textInput = input; }} />
+            );
+        }
+    }
     ReactDOM.render(
-        <CustomTextInput />,
+        <AutoFocusTextInput />,
         document.getElementById('root')
     );
 
