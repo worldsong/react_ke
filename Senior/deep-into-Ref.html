@@ -10,45 +10,29 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    function CustomTextInput(props) {
-        return (
-                <input ref={props.inputRef} />
-        )
-    }
-
-    function Parent(props) {
-        return (
-                <CustomTextInput inputRef={props.inputRef}/>
-        );
-    }
-
-    class Grandparent extends React.Component {
-        constructor(props) {
+    class NameForm extends React.Component {
+        constructor(props){
             super(props);
-            this.focusTextInput = this.focusTextInput.bind(this);
+            this.handleSubmit = this.handleSubmit.bind(this);
         }
-
-        focusTextInput() {
-            // Explicitly focus the text input using the raw DOM API
-            this.inputElement.focus();
+        handleSubmit(event){
+            alert('A name was submitted: ' + this.input.value);
+            event.preventDefault();
         }
         render(){
-            return (
-                <div>
-                    <Parent
-                            inputRef = {el => this.inputElement = el}
-                    />
-                    <input
-                            type="button"
-                            value="Focus the text input"
-                            onClick={this.focusTextInput}
-                    />
-                </div>
+            return(
+                    <form onSubmit={this.handleSubmit}>
+                        <label htmlFor="">
+                            Name:
+                            <input type="text" ref={input => this.input = input}/>
+                        </label>
+                        <input type="submit" value="提交"/>
+                    </form>
             )
         }
     }
     ReactDOM.render(
-        <Grandparent />,
+        <NameForm />,
         document.getElementById('root')
     );
 
