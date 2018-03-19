@@ -5,29 +5,31 @@
     <title>组件化</title>
 </head>
 <body>
-<div class='wrapper'>
-    <button class='like-btn'>
-        <span class='like-text'>点赞</span>
-        <span>👍</span>
-    </button>
-</div>
+<div class='wrapper'></div>
 </body>
 <script>
+    const createDOMFromString = (domString) => {
+        const div = document.createElement('div');
+        div.innerHTML = domString;
+        return div;
+    }
     class LikeButton {
         render(){
-            return `
+            this.el = createDOMFromString(`
                 <button id="like-btn">
                 <span class="like-text">赞</span>
                 <span>👍</span>
                 </button>
-            `
+            `);
+            this.el.addEventListener('click', () => console.log('click'), false);
+            return this.el;
         }
     }
     const wrapper = document.querySelector('.wrapper');
     const likeButton1 = new LikeButton();
-    wrapper.innerHTML = likeButton1.render();
+    wrapper.appendChild(likeButton1.render());
 
     const likeButton2 = new LikeButton();
-    wrapper.innerHTML += likeButton2.render()
+    wrapper.appendChild(likeButton2.render());
 </script>
 </html>
