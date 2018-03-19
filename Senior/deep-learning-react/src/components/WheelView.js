@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 /**
  * 选择组件
  */
-export default class WheelDialog extends Component {
+export default class WheelView extends Component {
     constructor(props) {
         super(props);
         this.state = {
