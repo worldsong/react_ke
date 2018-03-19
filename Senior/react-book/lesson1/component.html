@@ -13,44 +13,51 @@
         div.innerHTML = domString;
         return div;
     }
-    class LikeButton {
-        constructor(){
-            this.state = {isLiked: false}
+
+    const mount = (component, wrapper) => {
+        wrapper.appendChild(component._renderDOM());
+        component.onStateChange = (oldEl, newEl) => {
+            wrapper.insertBefore(newEl, oldEl);
+            wrapper.removeChild(oldEl);
         }
+    }
+
+    class Component {
         setState(state){
             const oldEl = this.el;
             this.state = state;
-            this.el = this.render();
-            if(this.onStateChange) this.onStateChange(oldEl, this.el)
+            this._renderDOM();
+            if(this.onStateChange) this.onStateChange(oldEl, this.el);
         }
-        changeLikeText(){
+        _renderDOM (){
+            this.el = createDOMFromString(this.render())
+            if(this.onClick){
+                this.el.addEventListener('click', this.onClick.bind(this), false)
+            }
+            return this.el;
+        }
+    }
+
+    class LikeButton extends Component{
+        constructor(){
+            super();
+            this.state = {isLiked: false}
+        }
+        onClick(){
             this.setState({
                 isLiked: !this.state.isLiked
             })
         }
         render(){
-            this.el = createDOMFromString(`
+            return `
                 <button id="like-btn">
                 <span class="like-text">${this.state.isLiked ? '取消': '点赞'}</span>
                 <span>👍</span>
                 </button>
-            `);
-            this.el.addEventListener('click', this.changeLikeText.bind(this), false);
-            return this.el;
+            `
         }
     }
     const wrapper = document.querySelector('.wrapper');
-    const likeButton1 = new LikeButton();
-    wrapper.appendChild(likeButton1.render()); // 第一次插入 DOM 元素
-    likeButton1.onStateChange = (oldEl, newEl) => {
-        wrapper.insertBefore(newEl, oldEl); // 插入新的元素
-        var log_time = new Date();
-        console.log(log_time)
-        while(Date.now() -log_time < 2000){}
-        wrapper.removeChild(oldEl); // 删除旧的元素
-    }
-
-    const likeButton2 = new LikeButton();
-    wrapper.appendChild(likeButton2.render());
+    mount(new LikeButton(), wrapper)
 </script>
 </html>
