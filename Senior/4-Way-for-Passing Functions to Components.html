@@ -11,11 +11,8 @@
 <div id="root"></div>
 <script type="text/babel">
     class Foo extends React.Component {
-        constructor(props) {
-            super(props);
-            this.handleClick = this.handleClick.bind(this);
-        }
-        handleClick() {
+        // Note: this syntax is experimental and not standardized yet.
+        handleClick = () => {
             console.log('Click happened');
         }
         render() {
