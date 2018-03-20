@@ -11,12 +11,11 @@
 <div id="root"></div>
 <script type="text/babel">
     class Foo extends React.Component {
-        // Note: this syntax is experimental and not standardized yet.
-        handleClick = () => {
+        handleClick() {
             console.log('Click happened');
         }
         render() {
-            return <button onClick={this.handleClick}>Click Me</button>;
+            return <button onClick={this.handleClick.bind(this)}>Click Me</button>;
         }
     }
     ReactDOM.render(
