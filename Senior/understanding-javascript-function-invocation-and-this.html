@@ -16,14 +16,38 @@
     }
     hello.call("Yehuda", "world")*/
 
-    function hello(thing) {
+/*    function hello(thing) {
         console.log("Hello " + thing);
     }
     hello("world");
 
 // desugars to:
 hello.call(window, "world");
-// The short version is: a function invocation like fn(...args) is the same as fn.call(window [ES5-strict: undefined], ...args).
+// The short version is: a function invocation like fn(...args) is the same as fn.call(window [ES5-strict: undefined], ...args).*/
+
+/*var person = {
+    name: "Bredan Eich",
+    hello: function (thing) {
+        console.log(this.name + " say hello " + thing);
+    }
+}
+// this:
+person.hello("world");
+
+// desugars to this:
+person.hello.call(person, "world");*/
+
+function hello(thing) {
+    console.log(this + " says hello " + thing);
+}
+
+var person = {name: "Brendan Eich"}
+person.hello = hello;
+
+person.hello("world"); // still desugars to person.hello.call(person, "world")
+
+person.hello.call(person, "world");
+hello.call(window, "world");
     ReactDOM.render(
             <h1>Hello, world!</h1>,
         document.getElementById('root')
