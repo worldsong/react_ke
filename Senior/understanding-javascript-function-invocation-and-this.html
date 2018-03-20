@@ -9,6 +9,7 @@
 </head>
 <body>
 <div id="root"></div>
+<div id="click">点我</div>
 <script type="text/babel">
 
 /*    function hello(thing) {
@@ -37,7 +38,7 @@ person.hello("world");
 // desugars to this:
 person.hello.call(person, "world");*/
 
-function hello(thing) {
+/*function hello(thing) {
     console.log(this + " says hello " + thing);
 }
 
@@ -46,8 +47,42 @@ person.hello = hello;
 
 person.hello("world"); // still desugars to person.hello.call(person, "world")
 
-person.hello.call(person, "world");
+person.hello.call(person, "world")
 hello.call(window, "world");
+;*/
+
+var person = {
+    name: "Brendan Eich",
+    hello: function(thing){
+        console.log(this.name + " says hello " + thing);
+    }
+}
+
+/*var boundHello = function(thing){
+    return person.hello.call(person, thing);
+}
+person.hello.call(person, "world");
+boundHello("world");
+boundHello.call(window, "world");
+boundHello.call(boundHello, "world");*/
+
+/*var bind = function (func, thisValue) {
+    return function () {
+        return func.apply(thisValue, arguments);
+    }
+}
+var boundHello = bind(person.hello, person);
+boundHello("world")*/
+
+/*var boundHello = person.hello.bind(person);
+boundHello("world");*/
+
+var div = document.getElementById("click");
+div.onclick = function () {
+    console.log("clicked")
+    person.hello.bind(person)("world")
+}
+
     ReactDOM.render(
             <h1>Hello, world!</h1>,
         document.getElementById('root')
