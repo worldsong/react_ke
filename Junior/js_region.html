@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title> js三级联动 </title>
+
+    <meta name="author" content="worldsong" />
+
+    <meta name="website" content="http://songfens.club/" />
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <style type="text/css">
+
+        select {width:200px; }
+
+    </style>
+
+</head>
+
+<body>
+
+<select id="province" size="1" onchange="change(this.value);"><option>请选择省份</option>
+
+</select>
+
+<select id="city" size="1" onchange="countyChange(this.value);"><option>请选择地市</option>
+
+</select>
+
+<select id="county" size="1"><option>请选择县城</option>
+
+</select>
+
+<script type="text/javascript">
+
+    var region = {
+        湖南:
+            {
+                "常德" :["石门","桃源","临澧","汉寿"],
+                "益阳":["益阳1","益阳2","益阳3"],
+                "岳阳":["岳阳1","岳阳2","岳阳3","岳阳4","岳阳5","岳阳6","岳阳7"],
+                "永州":["永州1","永州2"],
+                "郴州":["郴州1","郴州2","郴州3"],
+                "湘潭":["湘潭1","湘潭2","湘潭3"]
+            },
+        广东:
+            {
+                "广州":["广州1","广州2","广州3"],
+                "珠海":["珠海1","珠海2","珠海3"],
+                "佛山":["佛山1"]
+            }
+    }
+//    console.log(region["湖南"]["常德"]);
+
+    var province = document.getElementById("province");
+    var city = document.getElementById("city");
+    var county = document.getElementById("county");
+//    console.log(province)
+    //二级联动不用定义你选的省份,直接用省份(key)来决定下面的市(value)值,
+    var provinceName = null;
+    for (ele in region)
+    {
+        console.log(ele);
+        var op = new Option(ele , ele , false , false);
+        province.options[province.length] = op;
+    }
+    var change = function(src) {
+        city.innerHTML = "";
+        for (index in region[src])
+        {
+            console.log(index);
+            var op = new Option(index , index , false , false);
+            city.options[city.length] = op;
+        }
+        //记住你选的省份的值是什么
+        provinceName=src;
+    }
+    var countyChange = function(src2) {
+        county.innerHTML = "";
+        //关键是如何表示:第三级县城的数据:??
+        for (index in region[provinceName][src2])
+        {
+//            console.log(index);
+            var op = new Option(region[provinceName][src2][index] , region[provinceName][src2][index] , false , false);
+            county.options[county.length] = op;
+        }
+    }
+    // region[省][市].在foreach循环中要注意的一点是:key的值取出来是直接对于的值,而不是索引序号,只有最后面value的值foreach出来才是索引序号(最后面的value值是数组).
+</script>
+</body>
+</html>
