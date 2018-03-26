@@ -31,8 +31,18 @@
             }, 0)
         }
 
+        click = () => {
+            console.log('clicked')
+            this.setState({count: this.state.count + 1})
+            this.setState({count: this.state.count + 1})
+        }
+
         render () {
-            return null
+            return (
+                    <div><span>count: {this.state.count}</span>
+                        <button ref="button" onClick={this.click}>点击</button>
+                    </div>
+            )
         }
     }
     ReactDOM.render(
