@@ -29,6 +29,7 @@
                 this.setState({count: this.state.count + 1})
                 console.log(this.state.count) // 第四次输出
             }, 0)
+            this.refs.button.addEventListener('click', this.click)
         }
 
         click = () => {
@@ -40,7 +41,7 @@
         render () {
             return (
                     <div><span>count: {this.state.count}</span>
-                        <button ref="button" onClick={this.click}>点击</button>
+                        <button ref="button">点击</button>
                     </div>
             )
         }
