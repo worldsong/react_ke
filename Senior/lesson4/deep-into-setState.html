@@ -26,6 +26,8 @@
             this.setState((state, props) => {
                 return {count: state.count + 1};
             })
+            this.setState({count: this.state.count + 1})
+
             console.log(this.state.count) // 第二次输出
             setTimeout(() => {
                 this.setState({count: this.state.count + 1})
