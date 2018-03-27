@@ -10,36 +10,46 @@
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    class Test extends React.Component{
+    class Son extends React.Component{
+        render(){
+            const {index,number,handleClick} = this.props
+            //在每次渲染子组件时，打印该子组件的数字内容
+            console.log(number);
+            return <h1 onClick ={() => handleClick(index)}>{number}</h1>
+        }
+    }
+    class Father extends React.Component{
         constructor(props) {
             super(props);
             this.state = {
-                Number:1//设state中Number值为1
+                numberArray:[0,1,2]
             }
         }
-        //这里调用了setState但是并没有改变setState中的值
-        handleClick = () => {
-            const preNumber = this.state.Number
+        //点击后使numberArray中数组下标为index的数字值加一，重渲染对应的Son组件
+        handleClick = (index) => {
+            let preNumberArray = this.state.numberArray
+            preNumberArray[index] += 1;
             this.setState({
-                Number:this.state.Number
+                numberArray:preNumberArray
             })
         }
-        //在render函数调用前判断：如果前后state中Number不变，通过return false阻止render调用
-        shouldComponentUpdate(nextProps,nextState){
-            if(nextState.Number == this.state.Number){
-                return false
-            }
-        }
         render(){
-            //当render函数被调用时，打印当前的Number
-            console.log(this.state.Number)
-            return(<h1 onClick = {this.handleClick} style ={{margin:30}}>
-                {this.state.Number}
-            </h1>)
+            return(<div style ={{margin:30}}>{
+                this.state.numberArray.map(
+                    (number,key) => {
+                        return <Son
+                                key = {key}
+                                index = {key}
+                                number ={number}
+                                handleClick ={this.handleClick}/>
+                    }
+                )
+            }
+            </div>)
         }
     }
     ReactDOM.render(
-        <Test />,
+        <Father />,
         document.getElementById('root')
     );
 
