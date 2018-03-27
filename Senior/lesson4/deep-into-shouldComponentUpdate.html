@@ -6,69 +6,34 @@
     <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
-    <script src="https://cdn.bootcss.com/immutable/3.8.2/immutable.js"></script>
 </head>
 <body>
 <div id="root"></div>
 <script type="text/babel">
-    class Son extends React.Component{
-        shouldComponentUpdate(nextProps,nextState){
-            console.log(
-                '对象变化后' +
-                nextProps.numberObject.get('number')+
-                '对象变化前' +
-                this.props.numberObject.get('number'));
-            //旧的number Object对象的number属性 == 新的number Object对象的number属性
-            if(nextProps.numberObject.get('number') == this.props.numberObject.get('number')){
-                return false
-            }
-            return true
-        }
-        render(){
-            const {index,numberObject,handleClick} = this.props
-            //在每次渲染子组件时，打印该子组件的数字内容
-            console.log(numberObject.get('number'));
-            return <h1 onClick ={() => handleClick(index)}>{numberObject.get('number')}</h1>
-        }
-    }
-    class Father extends React.Component{
+    class Test extends React.PureComponent {
         constructor(props) {
             super(props);
             this.state = {
-                numberArray:Immutable.fromJS([
-                    {number:0 /*对象中其他的属性*/},
-                    {number:1 /*对象中其他的属性*/},
-                    {number:2 /*对象中其他的属性*/}
-                ])
+                Number:1//设state中Number值为1
             }
         }
-        //点击后使numberArray中数组下标为index的数字值加一，重渲染对应的Son组件
-        handleClick = (index) => {
-            let preNumberArray = this.state.numberArray;
-            //使新的number Object对象的number属性加一，旧的number Object对象属性不变
-            let newNumber = preNumberArray.get(index).get('number') + 1;
-            preNumberArray = preNumberArray.set(index,Immutable.fromJS({number: newNumber}))
+        //这里调用了setState但是并没有改变setState中的值
+        handleClick = () => {
+            const preNumber = this.state.Number
             this.setState({
-                numberArray:preNumberArray
+                Number:this.state.Number
             })
         }
         render(){
-            return(<div style ={{margin:30}}>{
-                this.state.numberArray.map(
-                    (numberObject,key) => {
-                        return <Son
-                                key = {key}
-                                index = {key}
-                                numberObject ={numberObject}
-                                handleClick ={this.handleClick}/>
-                    }
-                )
-            }
-            </div>)
+            //当render函数被调用时，打印当前的Number
+            console.log(this.state.Number)
+            return(<h1 onClick = {this.handleClick} style ={{margin:30}}>
+                {this.state.Number}
+            </h1>)
         }
     }
     ReactDOM.render(
-        <Father />,
+        <Test />,
         document.getElementById('root')
     );
 
