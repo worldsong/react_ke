@@ -11,6 +11,12 @@
 <div id="root"></div>
 <script type="text/babel">
     class Son extends React.Component{
+        shouldComponentUpdate(nextProps,nextState){
+            if(nextProps.number == this.props.number){
+                return false
+            }
+            return true
+        }
         render(){
             const {index,number,handleClick} = this.props
             //在每次渲染子组件时，打印该子组件的数字内容
