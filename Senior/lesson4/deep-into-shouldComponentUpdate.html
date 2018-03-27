@@ -12,6 +12,12 @@
 <script type="text/babel">
     class Son extends React.Component{
         shouldComponentUpdate(nextProps,nextState){
+            console.log(
+                '对象变化后' +
+                JSON.stringify(nextProps.numberObject)+
+                '对象变化前' +
+                JSON.stringify(this.props.numberObject));
+            //旧的number Object对象的number属性 == 新的number Object对象的number属性
             if(nextProps.numberObject.number == this.props.numberObject.number){
                 return false
             }
@@ -37,7 +43,10 @@
         }
         //点击后使numberArray中数组下标为index的数字值加一，重渲染对应的Son组件
         handleClick = (index) => {
-            let preNumberArray = this.state.numberArray
+            let preNumberArray = this.state.numberArray;
+            //把做修改的number Object先拷贝到一个新的对象中，替换原来的对象
+            preNumberArray[index] = Object.assign({},preNumberArray[index])
+            //使新的number Object对象的number属性加一，旧的number Object对象属性不变
             preNumberArray[index].number += 1;
             this.setState({
                 numberArray:preNumberArray
