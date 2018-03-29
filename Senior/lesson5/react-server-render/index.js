@@ -1,10 +1,14 @@
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
+const ReactDOMServer = require('react-dom/server')
+const React = require('react')
+const App = require('./src/App.js')
 const server = http.createServer(function (request, response) {
     if (request.url === '/') {
         response.writeHead(200, { 'Content-Type': 'text/html' })
-        fs.createReadStream(path.join(__dirname, 'index.html')).pipe(response)
+        response.write(ReactDOMServer.renderToString(React.createElement(App)))
+        response.end()
     } else {
         if (/\.js/.test(request.url)) {
             // js file
