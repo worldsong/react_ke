@@ -1,1 +1,1 @@
-export default () => <div>Welcome to next.js!</div>
+export default () => <p style={{ color: 'red' }}>hi there</p>
