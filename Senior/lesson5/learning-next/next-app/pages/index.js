@@ -1,13 +1,10 @@
-const fetch = require('node-fetch');
-const Page = ({ stars }) =>
+import Link from 'next/link'
+
+export default () =>
     <div>
-        Next stars: {stars}
+        Click{' '}
+        <Link href="/about">
+            <a>here</a>
+        </Link>{' '}
+        to read more
     </div>
-
-Page.getInitialProps = async ({ req }) => {
-    const res = await fetch('https://api.github.com/repos/zeit/next.js')
-    const json = await res.json()
-    return { stars: json.stargazers_count }
-}
-
-export default Page
