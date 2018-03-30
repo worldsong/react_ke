@@ -1,1 +1,1 @@
-export default () => <p style={{ color: 'red' }}>hi there</p>
+export default () => <img src="/static/react_合并更新.png" />
