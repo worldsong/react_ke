@@ -1,10 +1,16 @@
-import Head from 'next/head'
+import React from 'react'
 
-export default () =>
-    <div>
-        <Head>
-            <title>My page title</title>
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        </Head>
-        <p>Hello world!</p>
-    </div>
+export default class extends React.Component {
+    static async getInitialProps({ req }) {
+        const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
+        return { userAgent }
+    }
+
+    render() {
+        return (
+            <div>
+                Hello World {this.props.userAgent}
+            </div>
+        )
+    }
+}
