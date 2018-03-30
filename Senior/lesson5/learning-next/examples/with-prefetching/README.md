@@ -1,0 +1,44 @@
+[![Deploy to now](https://deploy.now.sh/static/button.svg)](https://deploy.now.sh/?repo=https://github.com/zeit/next.js/tree/master/examples/with-prefetching)
+# Example app with prefetching pages
+
+## How to use
+
+### Using `create-next-app`
+
+Download [`create-next-app`](https://github.com/segmentio/create-next-app) to bootstrap the example:
+
+```bash
+npx create-next-app --example with-prefetching with-prefetching-app
+# or
+yarn create next-app --example with-prefetching with-prefetching-app
+```
+
+### Download manually
+
+Download the example [or clone the repo](https://github.com/zeit/next.js):
+
+```bash
+curl https://codeload.github.com/zeit/next.js/tar.gz/canary | tar -xz --strip=2 next.js-canary/examples/with-prefetching
+cd with-prefetching
+```
+
+Install it and run:
+
+```bash
+npm install
+npm run dev
+```
+
+Deploy it to the cloud with [now](https://zeit.co/now) ([download](https://zeit.co/download))
+
+```bash
+now
+```
+
+## The idea behind the example
+
+This example features:
+
+* An app with four simple pages
+* The "about" page uses the imperative (i.e.: "manual") prefetching API to prefetch on hover
+* It will prefetch all the pages in the background except the "contact" page
