@@ -3,7 +3,7 @@ import Link from 'next/link'
 export default () =>
     <div>
         Click{' '}
-        <Link href={{ pathname: '/about', query: { name: 'Zeit' } }}>
+        <Link href="/about" replace>
             <a>here</a>
         </Link>{' '}
         to read more
