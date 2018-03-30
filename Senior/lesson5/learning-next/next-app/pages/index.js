@@ -1,9 +1,6 @@
-import Link from 'next/link'
-import Unexpected_A from 'third-library'
+import Router from 'next/router'
 
-export default ({ href, name }) =>
-    <Link href={href} passHref>
-        <Unexpected_A>
-            {name}
-        </Unexpected_A>
-    </Link>
+export default () =>
+    <div>
+        Click <span onClick={() => Router.push('/about')}>here</span> to read more
+    </div>
