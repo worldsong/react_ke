@@ -5,68 +5,26 @@ import {
     Link
 } from 'react-router-dom'
 
-const BasicExample = () => (
+const ParamsExample = () => (
     <Router>
         <div>
+            <h2>账号</h2>
             <ul>
-                <li><Link to="/">首页</Link></li>
-                <li><Link to="/about">关于</Link></li>
-                <li><Link to="/topics">主题列表</Link></li>
+                <li><Link to="/react-router">React Router</Link></li>
+                <li><Link to="/leoashin">LeoAshin</Link></li>
+                <li><Link to="/justjavac">justjavac</Link></li>
+                <li><Link to="/reacttraining">React Training</Link></li>
             </ul>
 
-            <hr/>
-
-            <Route exact path="/" component={Home}/>
-            <Route path="/about" component={About}/>
-            <Route path="/topics" component={Topics}/>
+            <Route path="/:id" component={Child}/>
         </div>
     </Router>
 )
 
-const Home = () => (
+const Child = ({ match }) => (
     <div>
-        <h2>首页</h2>
+        <h3>ID: {match.params.id}</h3>
     </div>
 )
 
-const About = () => (
-    <div>
-        <h2>关于</h2>
-    </div>
-)
-
-const Topics = ({ match }) => (
-    <div>
-        <h2>主题列表</h2>
-        <ul>
-            <li>
-                <Link to={`${match.url}/rendering`}>
-                    使用 React 渲染
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/components`}>
-                    组件
-                </Link>
-            </li>
-            <li>
-                <Link to={`${match.url}/props-v-state`}>
-                    属性 v. 状态
-                </Link>
-            </li>
-        </ul>
-
-        <Route path={`${match.url}/:topicId`} component={Topic}/>
-        <Route exact path={match.url} render={() => (
-            <h3>请选择一个主题。</h3>
-        )}/>
-    </div>
-)
-
-const Topic = ({ match }) => (
-    <div>
-        <h3>{match.params.topicId}</h3>
-    </div>
-)
-
-export default BasicExample
+export default ParamsExample
