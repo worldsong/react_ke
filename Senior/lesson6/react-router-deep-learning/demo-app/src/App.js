@@ -30,9 +30,9 @@ const AmbiguousExample = () => (
           <Switch>. It will render the first one that matches.
       */}
             <Switch>
+                <Route path="/:user" component={User}/>
                 <Route path="/about" component={About}/>
                 <Route path="/company" component={Company}/>
-                <Route path="/:user" component={User}/>
             </Switch>
         </div>
     </Router>
