@@ -3,71 +3,45 @@ import {
     BrowserRouter as Router,
     Route,
     Link,
-    Prompt
+    Switch,
+    Redirect
 } from 'react-router-dom'
 
-const PreventingTransitionsExample = () => (
+const NoMatchExample = () => (
     <Router>
         <div>
             <ul>
-                <li><Link to="/">Form</Link></li>
-                <li><Link to="/one">One</Link></li>
-                <li><Link to="/two">Two</Link></li>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/old-match">Old Match, to be redirected</Link></li>
+                <li><Link to="/will-match">Will Match</Link></li>
+                <li><Link to="/will-not-match">Will Not Match</Link></li>
+                <li><Link to="/also/will/not/match">Also Will Not Match</Link></li>
             </ul>
-            <Route path="/" exact component={Form}/>
-            <Route path="/one" render={() => <h3>One</h3>}/>
-            <Route path="/two" render={() => <h3>Two</h3>}/>
+            <Switch>
+                <Route path="/" exact component={Home}/>
+                <Redirect from="/old-match" to="/will-match"/>
+                <Route path="/will-match" component={WillMatch}/>
+                <Route component={NoMatch}/>
+            </Switch>
         </div>
     </Router>
 )
 
-class Form extends React.Component {
-    state = {
-        isBlocking: false
-    }
+const Home = () => (
+    <p>
+        A <code>&lt;Switch></code> renders the
+        first child <code>&lt;Route></code> that
+        matches. A <code>&lt;Route></code> with
+        no <code>path</code> always matches.
+    </p>
+)
 
-    render() {
-        const { isBlocking } = this.state
+const WillMatch = () => <h3>Matched!</h3>
 
-        return (
-            <form
-                onSubmit={event => {
-                    event.preventDefault()
-                    event.target.reset()
-                    this.setState({
-                        isBlocking: false
-                    })
-                }}
-            >
-                <Prompt
-                    when={isBlocking}
-                    message={location => (
-                        `Are you sure you want to go to ${location.pathname}`
-                    )}
-                />
+const NoMatch = ({ location }) => (
+    <div>
+        <h3>No match for <code>{location.pathname}</code></h3>
+    </div>
+)
 
-                <p>
-                    Blocking? {isBlocking ? 'Yes, click a link or the back button' : 'Nope'}
-                </p>
-
-                <p>
-                    <input
-                        size="50"
-                        placeholder="type something to block transitions"
-                        onChange={event => {
-                            this.setState({
-                                isBlocking: event.target.value.length > 0
-                            })
-                        }}
-                    />
-                </p>
-
-                <p>
-                    <button>Submit to stop blocking</button>
-                </p>
-            </form>
-        )
-    }
-}
-
-export default PreventingTransitionsExample
+export default NoMatchExample
